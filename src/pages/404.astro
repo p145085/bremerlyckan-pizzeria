@@ -6,6 +6,7 @@ import MobileBar from "../components/MobileBar.astro";
 import OrderDialogs from "../components/OrderDialogs.astro";
 import Icon from "../components/Icon.astro";
 import { ordering } from "../data/site.js";
+import { withBase } from "../lib/url";
 ---
 
 <Base title="Sidan finns inte – Bremerlyckan Pizzeria" noindex>
@@ -16,7 +17,7 @@ import { ordering } from "../data/site.js";
     <p class="lead">Men pizzan gör det. Kolla menyn eller beställ direkt.</p>
     <div class="nf-ctas">
       <a class="btn btn-primary btn-lg" href={ordering.direct.url} data-order>Beställ online <Icon name="arrow" class="arrow" /></a>
-      <a class="btn btn-ghost btn-lg" href="/#meny">Se menyn</a>
+      <a class="btn btn-ghost btn-lg" href={withBase("/#meny")}>Se menyn</a>
     </div>
   </main>
   <Footer />

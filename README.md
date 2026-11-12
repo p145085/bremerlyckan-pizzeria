@@ -104,6 +104,27 @@ Kartan använder [Leaflet](https://leafletjs.com) och OpenStreetMaps kartbilder.
 besökaren scrollar ner mot den, sätter inga cookies och kräver ingen API-nyckel. Positionen styrs av
 `site.geo` i `src/data/site.js`.
 
+## Förhandsvisning på GitHub Pages
+
+Varje push till `main` bygger och publicerar en förhandsvisning via GitHub Actions
+(`.github/workflows/deploy-pages.yml`) på `https://<användare>.github.io/<repo>/`.
+
+Förhandsvisningen byggs med tre miljövariabler:
+
+| Variabel      | Exempel                          | Gör                                                   |
+| ------------- | -------------------------------- | ----------------------------------------------------- |
+| `SITE_URL`    | `https://p145085.github.io`      | adress för canonical-länkar och delningsbild          |
+| `BASE_PATH`   | `/bremerlyckan-pizzeria`         | sajten ligger i en undermapp i stället för på roten   |
+| `PUBLIC_DEMO` | `true`                           | `noindex` (syns inte i Google) och en "Förhandsvisning"-rad |
+
+Samma sak lokalt:
+
+```bash
+SITE_URL=https://p145085.github.io BASE_PATH=/bremerlyckan-pizzeria PUBLIC_DEMO=true npm run build
+```
+
+Utan variablerna byggs den riktiga sajten för `https://www.bremerlyckanpizzeria.se`.
+
 ## Publicera
 
 Sajten är statisk – `npm run build` ger mappen `dist/` som kan läggas på valfritt webbhotell
@@ -111,7 +132,8 @@ Sajten är statisk – `npm run build` ger mappen `dist/` som kan läggas på va
 
 - Byggkommando: `npm run build`
 - Publiceringsmapp: `dist`
-- Ange slutlig adress i `astro.config.mjs` (`site`) – den används för canonical-länkar, delningsbild och sitemap.
+- Slutlig adress är förvald i `astro.config.mjs` (`site`) och används för canonical-länkar, delningsbild
+  och sitemap. Bygg utan `PUBLIC_DEMO`, annars får sidan `noindex`.
 
 ### Viktigt om domänen
 
@@ -131,7 +153,7 @@ webbplatsen. Kontrollera att restaurangen får använda dem utanför FoodToday �
 egna foton. Lägg dem i `src/assets/photos/` (PNG med transparent bakgrund ger bäst resultat i toppen och
 i bildbandet). Astro konverterar och skalar bilderna automatiskt vid bygget (AVIF/WebP).
 
-Logotypen (`src/assets/brand/logo-round.png`) och slottssilhuetten i sidfoten (`public/images/castle.webp`)
+Logotypen (`src/assets/brand/logo-round.png`) och slottssilhuetten i sidfoten (`src/assets/brand/castle.webp`)
 är tagna från restaurangens logotyp.
 
 ## Teknik
@@ -147,7 +169,7 @@ Logotypen (`src/assets/brand/logo-round.png`) och slottssilhuetten i sidfoten (`
 - På Astro 5 varnar `npm audit` för kända brister. De gäller server-rendering, uppladdade bilder och
   osäker indata. Inget av det används här, eftersom sajten byggs statiskt från egna filer. Uppgradera ändå
   när ni har Node 22. `sharp` är redan låst till en patchad version via `overrides` i `package.json`.
-- Typsnitten (Noto Serif Display och Archivo, SIL Open Font License) ligger lokalt i `public/fonts/` –
+- Typsnitten (Noto Serif Display och Archivo, SIL Open Font License) ligger lokalt i `src/assets/fonts/` –
   inga anrop till Google Fonts.
 - Ingen spårning, inga cookies.
 
@@ -155,7 +177,7 @@ Logotypen (`src/assets/brand/logo-round.png`) och slottssilhuetten i sidfoten (`
 src/
   components/   Header, Hero, Menu, Visit (karta + öppettider), Footer, OrderDialogs …
   data/         site.js (restaurangen) och menu.json (menyn)
-  lib/          öppettidslogik och menyhjälpare
+  lib/          öppettidslogik, menyhjälpare och länkar (withBase)
   scripts/      lite JavaScript för sök, status, karta och beställning
   styles/       global.css (färger, typsnitt, knappar)
 scripts/        sync-menu.mjs – synkar menyn mot FoodToday

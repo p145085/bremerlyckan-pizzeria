@@ -7,21 +7,21 @@
 
 @font-face {
   font-family: "Noto Serif Display Cond";
-  src: url("/fonts/noto-serif-display-cond.woff2") format("woff2");
+  src: url("../assets/fonts/noto-serif-display-cond.woff2") format("woff2");
   font-weight: 500 900;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: "Noto Serif Display Cond";
-  src: url("/fonts/noto-serif-display-cond-italic.woff2") format("woff2");
+  src: url("../assets/fonts/noto-serif-display-cond-italic.woff2") format("woff2");
   font-weight: 400 700;
   font-style: italic;
   font-display: swap;
 }
 @font-face {
   font-family: "Archivo";
-  src: url("/fonts/archivo.woff2") format("woff2");
+  src: url("../assets/fonts/archivo.woff2") format("woff2");
   font-weight: 400 800;
   font-stretch: 75% 100%;
   font-style: normal;
@@ -473,4 +473,27 @@ input {
 }
 .print-only {
   display: none;
+}
+
+/* ── Förhandsvisning (bara när sajten byggs med PUBLIC_DEMO=true) ────────── */
+
+.demo-banner {
+  margin: 0;
+  padding: 8px var(--gutter);
+  background: var(--ink);
+  color: rgb(246 238 221 / 0.85);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  text-align: center;
+}
+.demo-banner strong {
+  color: var(--gold-light);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+@media print {
+  .demo-banner {
+    display: none;
+  }
 }

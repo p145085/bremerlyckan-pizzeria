@@ -3,11 +3,12 @@ import { Image } from "astro:assets";
 import logo from "../assets/brand/logo-round.png";
 import Icon from "./Icon.astro";
 import { site, ordering } from "../data/site.js";
+import { withBase } from "../lib/url";
 ---
 
 <header class="site-header" data-header>
   <div class="container header-inner">
-    <a class="brand" href="/#top" aria-label={`${site.name}, till början av sidan`}>
+    <a class="brand" href={withBase("/#top")} aria-label={`${site.name}, till början av sidan`}>
       <Image
         src={logo}
         alt=""
@@ -24,9 +25,9 @@ import { site, ordering } from "../data/site.js";
     </a>
 
     <nav class="main-nav" aria-label="Huvudmeny">
-      <a href="/#meny">Meny</a>
-      <a href="/#oppettider">Öppettider</a>
-      <a href="/#hitta-hit">Hitta hit</a>
+      <a href={withBase("/#meny")}>Meny</a>
+      <a href={withBase("/#oppettider")}>Öppettider</a>
+      <a href={withBase("/#hitta-hit")}>Hitta hit</a>
     </nav>
 
     <div class="header-actions">

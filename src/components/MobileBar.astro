@@ -2,10 +2,11 @@
 // Fast snabbmeny längst ner på mobilen – där tummen är.
 import Icon from "./Icon.astro";
 import { site, ordering } from "../data/site.js";
+import { withBase } from "../lib/url";
 ---
 
 <nav class="mobile-bar" aria-label="Snabbval">
-  <a href="/#meny">
+  <a href={withBase("/#meny")}>
     <Icon name="slice" />
     <span>Meny</span>
   </a>
@@ -13,7 +14,7 @@ import { site, ordering } from "../data/site.js";
     <Icon name="phone" />
     <span>Ring</span>
   </a>
-  <a href="/#hitta-hit">
+  <a href={withBase("/#hitta-hit")}>
     <Icon name="pin" />
     <span>Hitta hit</span>
   </a>

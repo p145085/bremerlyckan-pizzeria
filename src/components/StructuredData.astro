@@ -5,9 +5,10 @@ import { getImage } from "astro:assets";
 import logo from "../assets/brand/logo-round.png";
 import { site, ordering, activePartners, mapLinks } from "../data/site.js";
 import { menu, allItems, displayIngredients, commonIncludes } from "../lib/menu";
+import { withBase } from "../lib/url";
 
 const base = Astro.site ?? new URL(Astro.url.origin);
-const url = new URL("/", base).href;
+const url = new URL(withBase("/"), base).href;
 const logoImg = await getImage({ src: logo, width: 512, height: 512, format: "webp" });
 
 const DAY = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
@@ -24,7 +25,7 @@ const ld = {
   description: site.description,
   url,
   logo: new URL(logoImg.src, base).href,
-  image: [new URL("/og.jpg", base).href],
+  image: [new URL(withBase("/og.jpg"), base).href],
   telephone: site.phone.href.replace("tel:", ""),
   address: {
     "@type": "PostalAddress",

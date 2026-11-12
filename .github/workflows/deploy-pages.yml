@@ -1,0 +1,47 @@
+# Bygger förhandsvisningen och publicerar den på GitHub Pages vid varje push till main.
+# Adress: https://<användare>.github.io/<repo>/
+#
+# Förhandsvisningen får noindex (syns inte i Google) och en liten "Förhandsvisning"-rad
+# högst upp. När sajten flyttar till restaurangens domän: bygg utan miljövariablerna nedan.
+
+name: Publicera förhandsvisning
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      SITE_URL: https://${{ github.repository_owner }}.github.io
+      BASE_PATH: /${{ github.event.repository.name }}
+      PUBLIC_DEMO: "true"
+    steps:
+      - name: Hämta koden
+        uses: actions/checkout@v7
+      - name: Installera, bygg och ladda upp
+        uses: withastro/action@v6
+        with:
+          package-manager: npm
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publicera på GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
