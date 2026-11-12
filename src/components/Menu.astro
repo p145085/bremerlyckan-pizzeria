@@ -1,0 +1,695 @@
+---
+import Icon from "./Icon.astro";
+import {
+  menu,
+  allItems,
+  displayIngredients,
+  commonIncludes,
+  includesText,
+  price,
+  priceRange,
+  searchText,
+} from "../lib/menu";
+import { site } from "../data/site.js";
+
+const cats = menu.categories;
+---
+
+<section class="menu" id="meny" aria-labelledby="menu-title">
+  <div class="container">
+    <header class="menu-head">
+      <div class="menu-head-title">
+        <p class="eyebrow">Meny</p>
+        <h2 id="menu-title" class="section-title">Hela <em>menyn</em></h2>
+      </div>
+      <p class="lead menu-intro">
+        Samma priser för avhämtning och hemkörning – och dricka ingår till alla huvudrätter.
+      </p>
+    </header>
+
+    <div class="print-only print-head">
+      <strong>{site.name}</strong> · {site.address.street}, {site.address.city} · {site.phone.display}
+    </div>
+
+    <div class="menu-tools no-print">
+      <label class="menu-search">
+        <Icon name="search" />
+        <span class="visually-hidden">Sök i menyn</span>
+        <input
+          type="search"
+          placeholder="Sök rätt eller ingrediens"
+          autocomplete="off"
+          enterkeyhint="search"
+          data-menu-search
+        />
+      </label>
+      <div class="menu-tool-buttons">
+        <button type="button" class="chip" aria-pressed="false" data-menu-veg>
+          <Icon name="leaf" /> Vegetariskt
+        </button>
+        <button type="button" class="chip chip-print" data-menu-print>
+          <Icon name="print" /> Skriv ut
+        </button>
+      </div>
+    </div>
+
+    <div class="tabs-sentinel" aria-hidden="true" data-tabs-sentinel></div>
+    <nav class="menu-tabs no-print" aria-label="Menykategorier" data-menu-tabs>
+      <ul role="list">
+        {
+          cats.map((c) => (
+            <li>
+              <a href={`#meny-${c.id}`} data-tab={c.id}>
+                {c.title}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <p class="menu-empty" data-menu-empty hidden>
+      Inga rätter matchar din sökning.
+      <button type="button" class="link-btn" data-menu-clear>Visa hela menyn</button>
+    </p>
+    <p class="visually-hidden" aria-live="polite" data-menu-live></p>
+
+    <div class="menu-body">
+      {
+        cats.map((cat) => {
+          const common = commonIncludes(cat);
+          const compact = cat.layout === "compact";
+          const count = allItems(cat).length;
+          return (
+            <section
+              class:list={["menu-cat", `cat-${cat.id}`, { compact }]}
+              id={`meny-${cat.id}`}
+              data-cat={cat.id}
+              aria-labelledby={`cat-${cat.id}`}
+            >
+              <header class="cat-head">
+                <h3 id={`cat-${cat.id}`}>
+                  {cat.title}
+                  {cat.id === "pizzor" && <span class="cat-count">{count} st</span>}
+                </h3>
+                {(cat.note || common.length > 0) && (
+                  <p class="cat-meta">
+                    {cat.note && <span>{cat.note}</span>}
+                    {common.length > 0 && (
+                      <span class="cat-includes">
+                        <Icon name="check" /> {includesText(common)}
+                      </span>
+                    )}
+                  </p>
+                )}
+              </header>
+
+              {cat.groups.map((g) => (
+                <div class="menu-group" data-group>
+                  {g.title && (
+                    <h4 class="group-title">
+                      <span>{g.title}</span>
+                      <span class="group-price">{priceRange(g.items)}</span>
+                    </h4>
+                  )}
+                  <ul class:list={["items", { compact }]} role="list">
+                    {g.items.map((item) => {
+                      const ingr = displayIngredients(item, cat);
+                      const extra = (item.includes ?? []).filter((x) => !common.includes(x));
+                      const hasDesc = ingr || item.veg || extra.length > 0;
+                      return (
+                        <li
+                          class:list={["item", { numbered: !!item.no }]}
+                          data-item
+                          data-search={searchText(item, cat, g)}
+                          data-veg={item.veg ? "" : undefined}
+                          data-veg-exempt={compact ? "" : undefined}
+                        >
+                          <div class="item-line">
+                            {item.no && (
+                              <span class="item-no">
+                                <span class="visually-hidden">Nr </span>
+                                {item.no}
+                              </span>
+                            )}
+                            <span class="item-name">
+                              {item.name}
+                              {item.note && <span class="item-note"> – {item.note}</span>}
+                            </span>
+                            <span class="item-dots" aria-hidden="true" />
+                            <span class="item-price">{price(item.price)}</span>
+                          </div>
+                          {hasDesc && (
+                            <p class="item-desc">
+                              {ingr && <span class="item-ingr">{ingr}</span>}
+                              {item.veg && (
+                                <span class="tag tag-veg">
+                                  <Icon name="leaf" /> Vegetarisk
+                                </span>
+                              )}
+                              {extra.length > 0 && <span class="tag">{includesText(extra)}</span>}
+                            </p>
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              ))}
+            </section>
+          );
+        })
+      }
+    </div>
+
+    <footer class="menu-foot">
+      <p>
+        <strong>Allergier eller specialkost?</strong> Ring oss på
+        <a href={site.phone.href}>{site.phone.display}</a> så berättar vi vad maten innehåller. Märkningen
+        vegetarisk utgår från ingredienslistan.
+      </p>
+    </footer>
+  </div>
+</section>
+
+<script>
+  import "../scripts/menu";
+</script>
+
+<style>
+  .menu {
+    position: relative;
+    padding-block: clamp(56px, 8vw, 112px) clamp(48px, 7vw, 96px);
+  }
+
+  .menu-head {
+    display: grid;
+    gap: 18px;
+    align-items: end;
+    margin-bottom: clamp(24px, 4vw, 40px);
+  }
+  .menu-head-title {
+    display: grid;
+    gap: 14px;
+  }
+  .menu-intro {
+    max-width: 30rem;
+  }
+  @media (min-width: 900px) {
+    .menu-head {
+      grid-template-columns: 1fr auto;
+      gap: 40px;
+    }
+    .menu-intro {
+      text-align: right;
+      justify-self: end;
+    }
+  }
+
+  /* ── Verktyg ── */
+  .menu-tools {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .menu-search {
+    flex: 1 1 300px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 52px;
+    padding: 0 20px;
+    border-radius: var(--pill);
+    background: #fff;
+    box-shadow:
+      inset 0 0 0 1px var(--line-strong),
+      var(--shadow-sm);
+    color: var(--muted);
+    cursor: text;
+    transition: box-shadow 0.15s ease;
+  }
+  .menu-search:focus-within {
+    box-shadow:
+      inset 0 0 0 2px var(--tomato),
+      var(--shadow-sm);
+  }
+  .menu-search input {
+    flex: 1;
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+    border: 0;
+    outline: none;
+    background: transparent;
+    color: var(--ink);
+    font-size: 1rem;
+  }
+  .menu-search input::placeholder {
+    color: #786b5e;
+  }
+  .menu-search input::-webkit-search-cancel-button {
+    cursor: pointer;
+  }
+  .menu-tool-buttons {
+    display: flex;
+    gap: 10px;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 52px;
+    padding: 0 20px;
+    border: 0;
+    border-radius: var(--pill);
+    background: rgb(255 255 255 / 0.55);
+    box-shadow: inset 0 0 0 1px var(--line-strong);
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease;
+  }
+  .chip:hover {
+    background: #fff;
+  }
+  .chip[aria-pressed="true"] {
+    background: var(--basil);
+    color: #fff;
+    box-shadow: none;
+  }
+  .chip[data-menu-veg] :global(.icon) {
+    color: var(--basil);
+  }
+  .chip[aria-pressed="true"] :global(.icon) {
+    color: #fff;
+  }
+  @media (max-width: 599px) {
+    .menu-tools {
+      flex-wrap: nowrap;
+    }
+    .menu-search {
+      flex: 1 1 0;
+      min-width: 0;
+      height: 48px;
+      padding: 0 16px;
+    }
+    .chip {
+      height: 48px;
+      padding: 0 16px;
+    }
+    /* utskrift är sällan aktuellt från mobilen */
+    .chip-print {
+      display: none;
+    }
+  }
+
+  /* ── Kategoriflikar (klistras under sidhuvudet) ── */
+  .tabs-sentinel {
+    height: 1px;
+    margin-bottom: -1px;
+  }
+  .menu-tabs {
+    position: sticky;
+    top: calc(var(--header-h) - 1px);
+    z-index: 20;
+    padding-block: 10px;
+    border-bottom: 1px solid transparent;
+    margin-bottom: 8px;
+    /* bakgrunden går kant i kant även om innehållet är centrerat */
+    clip-path: inset(0 -100vmax);
+    transition:
+      background-color 0.2s ease,
+      box-shadow 0.2s ease,
+      border-color 0.2s ease;
+  }
+  .menu-tabs[data-stuck] {
+    background: rgb(246 238 221 / 0.95);
+    box-shadow: 0 0 0 100vmax rgb(246 238 221 / 0.95);
+    border-bottom-color: var(--line);
+  }
+  @supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+    .menu-tabs[data-stuck] {
+      background: rgb(246 238 221 / 0.86);
+      box-shadow: 0 0 0 100vmax rgb(246 238 221 / 0.86);
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+    }
+  }
+  .menu-tabs ul {
+    display: flex;
+    gap: 8px;
+    margin: 0;
+    padding: 2px;
+    list-style: none;
+    overflow-x: auto;
+    scrollbar-width: none;
+    scroll-snap-type: x proximity;
+    -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent);
+    mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent);
+  }
+  .menu-tabs ul::-webkit-scrollbar {
+    display: none;
+  }
+  .menu-tabs li {
+    scroll-snap-align: start;
+  }
+  .menu-tabs a {
+    display: inline-flex;
+    align-items: center;
+    height: 40px;
+    padding: 0 16px;
+    border-radius: var(--pill);
+    background: rgb(255 255 255 / 0.5);
+    box-shadow: inset 0 0 0 1px var(--line-strong);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    white-space: nowrap;
+    text-decoration: none;
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease,
+      opacity 0.15s ease;
+  }
+  .menu-tabs a:hover {
+    background: #fff;
+  }
+  .menu-tabs a[aria-current="true"] {
+    background: var(--ink);
+    color: var(--paper);
+    box-shadow: none;
+  }
+  .menu-tabs a.is-empty {
+    opacity: 0.38;
+    pointer-events: none;
+  }
+
+  .menu-empty {
+    padding: 48px 0;
+    text-align: center;
+    font-size: 1.125rem;
+    color: var(--muted);
+  }
+  .link-btn {
+    border: 0;
+    padding: 0;
+    background: none;
+    color: var(--tomato);
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    cursor: pointer;
+  }
+
+  /* ── Kategorier ── */
+  .menu-cat {
+    /* html har redan scroll-padding för sidhuvudet – här bara flikraden */
+    scroll-margin-top: 66px;
+    padding-top: clamp(28px, 4vw, 48px);
+  }
+  .cat-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 6px 24px;
+    padding-bottom: 12px;
+    border-bottom: 3px solid var(--ink);
+  }
+  .cat-head h3 {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    font-size: clamp(2.1rem, 1.6rem + 2vw, 3.25rem);
+  }
+  .cat-count {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--tomato);
+    text-transform: uppercase;
+  }
+  .cat-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 18px;
+    font-size: 0.9375rem;
+    color: var(--muted);
+  }
+  .cat-includes {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 700;
+    color: var(--basil);
+  }
+
+  .menu-group + .menu-group {
+    margin-top: 18px;
+  }
+  .group-title {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 22px;
+    padding: 8px 14px;
+    border-radius: var(--radius-sm);
+    background: var(--paper-2);
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .group-price {
+    color: var(--tomato);
+    letter-spacing: 0.04em;
+  }
+
+  /* ── Rätter ── */
+  .items {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  @media (min-width: 900px) {
+    .items {
+      columns: 2;
+      column-gap: 64px;
+    }
+  }
+  .item {
+    break-inside: avoid;
+    padding: 15px 0 16px;
+    border-bottom: 1px dashed var(--line-strong);
+  }
+  .item-line {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .item-no {
+    flex: none;
+    width: 1.9rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.05rem;
+    color: var(--tomato);
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+  .item-name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.45rem;
+    line-height: 1.1;
+  }
+  .item-note {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-style: italic;
+    color: var(--muted);
+  }
+  .item-dots {
+    flex: 1;
+    min-width: 18px;
+    align-self: center;
+    margin-top: 6px;
+    border-bottom: 2px dotted rgb(29 25 21 / 0.28);
+  }
+  .item-price {
+    flex: none;
+    font-weight: 700;
+    font-size: 1.0625rem;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .item-desc {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 8px;
+    margin-top: 5px;
+    font-size: 0.9375rem;
+    line-height: 1.45;
+    color: var(--muted);
+  }
+  .item.numbered .item-desc {
+    padding-left: calc(1.9rem + 10px);
+  }
+  .item-ingr {
+    margin-right: 2px;
+  }
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 9px;
+    border-radius: var(--pill);
+    background: var(--paper-2);
+    color: var(--ink-2);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+  .tag :global(.icon) {
+    width: 1em;
+    height: 1em;
+  }
+  .tag-veg {
+    background: var(--basil-soft);
+    color: #1d4a2a;
+  }
+
+  /* Pizzorna får lite mer luft – det är det vi är kända för */
+  .cat-pizzor .item-name {
+    font-size: 1.55rem;
+  }
+
+  /* Kompakt: såser och drycker */
+  .items.compact {
+    columns: 1;
+  }
+  @media (min-width: 560px) {
+    .items.compact {
+      columns: 2;
+      column-gap: 40px;
+    }
+  }
+  @media (min-width: 900px) {
+    .items.compact {
+      columns: 3;
+      column-gap: 48px;
+    }
+  }
+  .items.compact .item {
+    padding: 11px 0;
+  }
+  .items.compact .item-name {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+  .items.compact .item-price {
+    font-size: 0.9375rem;
+  }
+
+  .menu-foot {
+    margin-top: clamp(32px, 5vw, 56px);
+    padding: 22px 26px;
+    border-radius: var(--radius);
+    background: var(--paper-2);
+    font-size: 0.9375rem;
+    color: var(--ink-2);
+  }
+  .menu-foot a {
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  /* ── Utskrift ── */
+  @media print {
+    .menu {
+      padding: 0;
+    }
+    .menu-head {
+      display: block;
+      margin-bottom: 4mm;
+    }
+    .menu-head .eyebrow,
+    .menu-intro {
+      display: none;
+    }
+    .section-title {
+      font-size: 26pt;
+    }
+    .print-head {
+      margin-bottom: 4mm;
+      font-size: 10pt;
+    }
+    .menu-cat {
+      padding-top: 5mm;
+      break-inside: auto;
+    }
+    .cat-head {
+      break-after: avoid;
+      padding-bottom: 1.5mm;
+      border-bottom-width: 1.5pt;
+    }
+    .cat-head h3 {
+      font-size: 17pt;
+    }
+    .items,
+    .items.compact {
+      columns: 2;
+      column-gap: 10mm;
+    }
+    .items.compact {
+      columns: 3;
+    }
+    .item {
+      padding: 1.6mm 0;
+    }
+    .item-name,
+    .cat-pizzor .item-name {
+      font-size: 11.5pt;
+    }
+    .item-price {
+      font-size: 10pt;
+    }
+    .items.compact .item {
+      padding: 1.1mm 0;
+    }
+    .items.compact .item-name,
+    .items.compact .item-price {
+      font-size: 8.5pt;
+    }
+    .item-desc {
+      font-size: 8.5pt;
+      margin-top: 0.5mm;
+    }
+    .tag {
+      padding: 0 4px;
+      font-size: 7pt;
+    }
+    .group-title {
+      margin-top: 2.5mm;
+      padding: 1mm 2mm;
+      font-size: 8pt;
+    }
+    .menu-foot {
+      margin-top: 5mm;
+      padding: 0;
+      background: none;
+      font-size: 8.5pt;
+    }
+    [hidden] {
+      display: none !important;
+    }
+  }
+</style>

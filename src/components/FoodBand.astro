@@ -1,0 +1,133 @@
+---
+// Ett band med maträtter som sakta glider förbi – visar bredden i köket.
+// Rent dekorativt (aria-hidden): menyn nedanför har all information.
+import { Image } from "astro:assets";
+import pizza from "../assets/photos/pizza-bacon-kottfars.png";
+import capricciosa from "../assets/photos/pizza-skinka-champinjoner.png";
+import kebabpizza from "../assets/photos/pizza-kebab.png";
+import stagioni from "../assets/photos/pizza-fyra-arstider.png";
+import kebab from "../assets/photos/kebabtallrik.png";
+import falafel from "../assets/photos/falafeltallrik.png";
+import calzone from "../assets/photos/calzone.png";
+import mix from "../assets/photos/mixtallrik.png";
+import chili from "../assets/photos/chili-cheese.png";
+
+const items = [
+  { word: "Pizza", img: pizza, round: true },
+  { word: "Kebab", img: kebab },
+  { word: "Capricciosa", img: capricciosa, round: true },
+  { word: "Calzone", img: calzone },
+  { word: "Falafel", img: falafel },
+  { word: "Kebabpizza", img: kebabpizza, round: true },
+  { word: "Chicken", img: mix },
+  { word: "Quattro stagioni", img: stagioni, round: true },
+  { word: "Chili cheese", img: chili },
+];
+---
+
+<section class="food-band" aria-hidden="true">
+  <div class="track">
+    {
+      [0, 1].map(() => (
+        <ul class="row" role="list">
+          {items.map((it) => (
+            <li class="cell">
+              <span class="word">{it.word}</span>
+              <span class:list={["plate", { round: it.round }]}>
+                <Image src={it.img} alt="" widths={[200, 400]} sizes="(min-width: 768px) 200px, 130px" loading="lazy" />
+              </span>
+            </li>
+          ))}
+        </ul>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .food-band {
+    position: relative;
+    overflow: hidden;
+    background: var(--dark);
+    color: var(--paper);
+    padding-block: clamp(18px, 3vw, 30px);
+  }
+  .food-band::before,
+  .food-band::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 8vw;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .food-band::before {
+    left: 0;
+    background: linear-gradient(90deg, var(--dark), transparent);
+  }
+  .food-band::after {
+    right: 0;
+    background: linear-gradient(-90deg, var(--dark), transparent);
+  }
+  .track {
+    display: flex;
+    width: max-content;
+    animation: slide 70s linear infinite;
+  }
+  .food-band:hover .track {
+    animation-play-state: paused;
+  }
+  .row {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .cell {
+    display: flex;
+    align-items: center;
+    gap: clamp(14px, 2vw, 26px);
+    padding-right: clamp(22px, 3vw, 44px);
+  }
+  .word {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 600;
+    font-size: clamp(2.2rem, 1.4rem + 3vw, 4.25rem);
+    line-height: 1;
+    color: var(--paper);
+    white-space: nowrap;
+  }
+  .cell:nth-child(3n + 2) .word {
+    color: var(--gold-light);
+  }
+  .plate {
+    display: block;
+    width: clamp(118px, 9vw + 64px, 210px);
+    filter: drop-shadow(0 12px 16px rgb(0 0 0 / 0.55));
+  }
+  .plate.round {
+    width: clamp(100px, 7vw + 58px, 172px);
+  }
+  .plate :global(img) {
+    width: 100%;
+    height: auto;
+  }
+
+  @keyframes slide {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .track {
+      animation: none;
+    }
+    .food-band {
+      overflow-x: auto;
+    }
+  }
+</style>

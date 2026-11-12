@@ -1,0 +1,296 @@
+---
+import { Picture } from "astro:assets";
+import margherita from "../assets/photos/margherita.png";
+import Icon from "./Icon.astro";
+import { site, ordering, activePartners } from "../data/site.js";
+import { openEveryDay } from "../lib/hours";
+
+const everyDay = openEveryDay(site.hours);
+---
+
+<section class="hero" id="top" aria-labelledby="hero-title">
+  <div class="container hero-grid">
+    <div class="hero-visual" aria-hidden="true">
+      <div class="hero-disc"></div>
+      <div class="hero-pizza">
+        <Picture
+          src={margherita}
+          alt=""
+          formats={["avif", "webp"]}
+          fallbackFormat="webp"
+          widths={[320, 480, 640, 800, 1000]}
+          sizes="(min-width: 1200px) 560px, (min-width: 768px) 44vw, 78vw"
+          loading="eager"
+          fetchpriority="high"
+        />
+      </div>
+      <svg class="hero-badge" viewBox="0 0 200 200">
+        <defs>
+          <path id="badge-ring" d="M100,100 m-74,0 a74,74 0 1,1 148,0 a74,74 0 1,1 -148,0"></path>
+        </defs>
+        <circle cx="100" cy="100" r="98" class="badge-bg"></circle>
+        <circle cx="100" cy="100" r="56" class="badge-inner"></circle>
+        <g class="badge-ring">
+          <text class="badge-ring-text">
+            <textPath href="#badge-ring" textLength="462" lengthAdjust="spacing">
+              PIZZERIA ✦ BREMERLYCKAN ✦ KALMAR ✦
+            </textPath>
+          </text>
+        </g>
+        <text class="badge-center" x="100" y="96" text-anchor="middle">Dricka</text>
+        <text class="badge-center" x="100" y="126" text-anchor="middle">ingår!</text>
+      </svg>
+    </div>
+
+    <div class="hero-copy">
+      <p class="status hero-status" data-status data-state="unknown">
+        <span class="dot" aria-hidden="true"></span>
+        <span data-status-text>{everyDay ? "Öppet alla dagar" : "Se öppettider"}</span>
+      </p>
+
+      <h1 id="hero-title" class="hero-title">
+        <span class="line">Pizza på</span>
+        <em class="line">Bremerlyckan</em>
+      </h1>
+
+      <p class="lead hero-lead">
+        Klassiska pizzor, kebab, sallader och burgare på {site.address.street} i {site.address.city}.
+        Hämta själv eller få maten hemkörd.
+      </p>
+
+      <div class="hero-ctas">
+        <a class="btn btn-primary btn-lg" href={ordering.direct.url} data-order>
+          Beställ online <Icon name="arrow" class="arrow" />
+        </a>
+        <a class="btn btn-ghost btn-lg" href="#meny">Se menyn</a>
+      </div>
+
+      <ul class="hero-facts" role="list">
+        <li><Icon name="cup" /> Dricka ingår till pizzan</li>
+        <li><Icon name="scooter" /> Avhämtning &amp; hemkörning</li>
+        {everyDay && <li><Icon name="clock" /> Öppet alla dagar</li>}
+      </ul>
+
+      {
+        activePartners.length > 0 && (
+          <p class="hero-partners">
+            Finns även på{" "}
+            {activePartners.map((p, i) => (
+              <>
+                {i > 0 && <span aria-hidden="true"> · </span>}
+                <a href={p.url} target="_blank" rel="noopener" style={`--brand:${p.color}`}>
+                  {p.name}
+                </a>
+              </>
+            ))}
+          </p>
+        )
+      }
+    </div>
+  </div>
+  <div class="gingham" aria-hidden="true"></div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-grid {
+    display: grid;
+    gap: 8px;
+    padding-block: 12px 48px;
+  }
+
+  /* ── Bild ── */
+  .hero-visual {
+    position: relative;
+    width: min(84vw, 380px);
+    aspect-ratio: 1;
+    justify-self: end;
+    margin-right: calc(-1 * var(--gutter) - 6vw);
+  }
+  .hero-disc {
+    position: absolute;
+    inset: 3%;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 34% 28%, rgb(255 255 255 / 0.07), transparent 55%),
+      radial-gradient(circle, #2b241e 0%, #1d1915 68%);
+    box-shadow:
+      inset 0 0 0 clamp(6px, 1.4vw, 12px) #1d1915,
+      inset 0 0 0 calc(clamp(6px, 1.4vw, 12px) + 2px) rgb(201 166 107 / 0.75),
+      var(--shadow-lg);
+  }
+  .hero-pizza {
+    position: absolute;
+    inset: 8%;
+    display: grid;
+    place-items: center;
+    filter: drop-shadow(0 18px 22px rgb(0 0 0 / 0.5));
+    animation: spin 140s linear infinite;
+  }
+  .hero-pizza :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .hero-badge {
+    position: absolute;
+    width: 34%;
+    left: -10%;
+    top: 2%;
+    transform: rotate(-12deg);
+    filter: drop-shadow(0 10px 18px rgb(146 38 26 / 0.35));
+  }
+  .badge-bg {
+    fill: var(--tomato);
+  }
+  .badge-inner {
+    fill: none;
+    stroke: rgb(246 238 221 / 0.55);
+    stroke-width: 1.5;
+    stroke-dasharray: 3 5;
+  }
+  .badge-ring {
+    transform-origin: 100px 100px;
+    animation: spin 30s linear infinite;
+  }
+  .badge-ring-text {
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    fill: var(--paper);
+  }
+  .badge-center {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 700;
+    font-size: 31px;
+    fill: #fff;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* ── Text ── */
+  .hero-copy {
+    display: grid;
+    justify-items: start;
+    gap: 18px;
+    /* rubriken skalas efter spaltens bredd, så "Bremerlyckan" alltid får plats */
+    container-type: inline-size;
+  }
+  .hero-status {
+    padding: 7px 14px 7px 12px;
+    border-radius: var(--pill);
+    background: rgb(255 255 255 / 0.6);
+    box-shadow: inset 0 0 0 1px var(--line);
+  }
+  .hero-title {
+    font-size: clamp(3.2rem, 1rem + 6vw, 6.6rem);
+    font-size: min(17.2cqi, 7.25rem);
+    line-height: 0.9;
+    letter-spacing: -0.012em;
+    padding-bottom: 0.08em;
+  }
+  .hero-title .line {
+    display: block;
+  }
+  .hero-title em {
+    font-style: italic;
+    font-weight: 700;
+    color: var(--tomato);
+    /* italic glyfer sticker ut till höger – lite luft så inget klipps */
+    padding-right: 0.06em;
+  }
+  .hero-lead {
+    max-width: 34rem;
+  }
+  .hero-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 4px;
+  }
+  .hero-facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 22px;
+    padding: 0;
+    margin-top: 6px;
+    list-style: none;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--ink-2);
+  }
+  .hero-facts li {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .hero-facts :global(.icon) {
+    color: var(--tomato);
+  }
+  .hero-partners {
+    font-size: 0.9375rem;
+    color: var(--muted);
+  }
+  .hero-partners a {
+    font-weight: 700;
+    color: var(--ink);
+    text-decoration-color: var(--brand);
+    text-decoration-thickness: 3px;
+  }
+
+  @media (max-width: 767px) {
+    .hero-grid {
+      margin-top: -8px;
+    }
+    .hero-visual {
+      width: min(78vw, 340px);
+    }
+    .hero-copy {
+      margin-top: -20px;
+      position: relative;
+    }
+    /* status visas redan i sidhuvudet på mobil */
+    .hero-status {
+      display: none;
+    }
+    .hero-ctas .btn {
+      flex: 1 1 auto;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .hero-grid {
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+      align-items: center;
+      gap: clamp(24px, 3vw, 48px);
+      min-height: min(calc(100svh - var(--header-h) - 26px), 780px);
+      padding-block: 40px 64px;
+    }
+    .hero-visual {
+      order: 2;
+      width: 112%;
+      max-width: 680px;
+      margin-right: calc(-1 * clamp(24px, 9vw - 60px, 120px));
+    }
+    .hero-copy {
+      order: 1;
+      gap: 22px;
+    }
+    .hero-badge {
+      left: -6%;
+      top: 0;
+      width: 30%;
+    }
+  }
+</style>

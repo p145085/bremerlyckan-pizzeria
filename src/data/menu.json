@@ -1,0 +1,766 @@
+{
+  "$comment": "Menyn på webbplatsen. Priser och ingredienser kan uppdateras från FoodToday med `npm run sync-menu` (matchas på ft-id). Namn, ordning, kategorier och veg-märkning redigeras här för hand.",
+  "currency": "kr",
+  "updated": "2026-11-12",
+  "categories": [
+    {
+      "id": "pizzor",
+      "title": "Pizzor",
+      "note": "Tomatsås och ost på alla pizzor om inget annat anges.",
+      "baseIngredients": ["tomatsås", "ost"],
+      "groups": [
+        {
+          "id": "klass-1",
+          "title": "Klass 1",
+          "ftCategory": 2708,
+          "items": [
+            {
+              "ft": 21189,
+              "no": "01",
+              "name": "Margherita",
+              "ingredients": ["tomatsås", "ost"],
+              "price": 125,
+              "includes": ["dricka"],
+              "veg": true
+            },
+            {
+              "ft": 21190,
+              "no": "02",
+              "name": "Vesuvio",
+              "ingredients": ["tomatsås", "ost", "skinka"],
+              "price": 125,
+              "includes": ["dricka"]
+            },
+            {
+              "ft": 21191,
+              "no": "03",
+              "name": "Pescatore",
+              "ingredients": ["tomatsås", "ost", "tonfisk", "lök"],
+              "price": 125,
+              "includes": ["dricka"]
+            },
+            {
+              "ft": 21192,
+              "no": "04",
+              "name": "Al funghi",
+              "ingredients": ["tomatsås", "ost", "färska champinjoner"],
+              "price": 125,
+              "includes": ["dricka"],
+              "veg": true
+            },
+            {
+              "ft": 21193,
+              "no": "05",
+              "name": "Bolognese",
+              "ingredients": ["tomatsås", "ost", "köttfärs", "lök"],
+              "price": 125,
+              "includes": ["dricka"]
+            },
+            {
+              "ft": 21194,
+              "no": "06",
+              "name": "Calzone",
+              "note": "inbakad",
+              "ingredients": ["tomatsås", "ost", "skinka"],
+              "price": 125,
+              "includes": ["dricka"]
+            }
+          ]
+        },
+        {
+          "id": "klass-2",
+          "title": "Klass 2",
+          "ftCategory": 2709,
+          "items": [
+            {
+              "ft": 21195,
+              "no": "07",
+              "name": "Capricciosa",
+              "ingredients": ["tomatsås", "ost", "skinka", "färska champinjoner"],
+              "price": 130,
+              "includes": ["dricka"]
+            },
+            {
+              "ft": 21196,
+              "no": "08",
+              "name": "Hawaii",
+              "ingredients": ["tomatsås", "ost", "skinka", "ananas"],
+              "price": 130,
+              "includes": ["dricka"]
+            },
+            {
+              "ft": 21198,
+              "no": "09",
+              "name": "La Mafia",
+              "ingredients": ["tomatsås", "ost", "bacon", "färsk paprika", "lök"],
+              "price": 130,
+              "includes": ["dricka"]
+            },
+            {
+              "ft": 21199,
+              "no": "10",
+              "name": "Marinara",
+              "ingredients": ["tomatsås", "ost", "musslor", "räkor"],
+              "price": 130,
+              "includes": ["dricka"]
+            },
+            {
+              "ft": 21200,
+              "no": "11",
+              "name": "Exotic",
+              "ingredients": ["tomatsås", "ost", "banan", "ananas", "curry"],
+              "price": 130,
+              "includes": ["dricka"],
+              "veg": true
+            },
+            {
+              "ft": 21201,
+              "no": "12",
+              "name": "Banana",
+              "ingredients": ["tomatsås", "ost", "skinka", "banan", "curry"],
+              "price": 130,
+              "includes": ["dricka"]
+            },
+            {
+              "ft": 21202,
+              "no": "13",
+              "name": "Salamino",
+              "ingredients": ["tomatsås", "ost", "salami", "färsk paprika", "lök"],
+              "price": 130,
+              "includes": ["dricka"]
+            },
+            {
+              "ft": 21203,
+              "no": "14",
+              "name": "Bussola",
+              "ingredients": ["tomatsås", "ost", "skinka", "räkor"],
+              "price": 130,
+              "includes": ["dricka"]
+            },
+            {
+              "ft": 21209,
+              "no": "15",
+              "name": "Tropicana",
+              "ingredients": ["tomatsås", "ost", "skinka", "ananas", "färska champinjoner"],
+              "price": 130,
+              "includes": ["dricka"]
+            },
+            {
+              "ft": 21212,
+              "no": "16",
+              "name": "Venezia",
+              "ingredients": ["tomatsås", "ost", "skinka", "räkor", "färska champinjoner"],
+              "price": 130,
+              "includes": ["dricka"]
+            }
+          ]
+        },
+        {
+          "id": "klass-3",
+          "title": "Klass 3",
+          "ftCategory": 2710,
+          "items": [
+            {
+              "ft": 21210,
+              "no": "17",
+              "name": "Mexicana",
+              "ingredients": ["tomatsås", "köttfärs", "jalapeños", "tacosås", "färska champinjoner", "tacokrydda"],
+              "price": 145,
+              "includes": ["dricka"]
+            },
+            {
+              "ft": 21219,
+              "no": "18",
+              "name": "Quattro stagioni",
+              "ingredients": ["tomatsås", "ost", "skinka", "musslor", "räkor", "färska champinjoner"],
+              "price": 145,
+              "includes": ["dricka"]
+            },
+            {
+              "ft": 193344,
+              "no": "19",
+              "name": "Holy Feta",
+              "ingredients": ["tomatsås", "ost", "salladsost", "feferoni", "färska champinjoner", "paprika"],
+              "price": 145,
+              "includes": ["dricka"],
+              "veg": true
+            },
+            {
+              "ft": 193345,
+              "no": "20",
+              "name": "Frutti di Mare",
+              "ingredients": ["tomatsås", "ost", "crabfish", "musslor", "räkor", "tonfisk", "kräftstjärtar", "färsk vitlök"],
+              "price": 145,
+              "includes": ["dricka"]
+            },
+            {
+              "ft": 193346,
+              "no": "21",
+              "name": "Quattro Formaggi",
+              "ingredients": ["tomatsås", "ost", "mozzarellaost", "gorgonzolaost", "vitlöksost"],
+              "price": 145,
+              "includes": ["dricka"],
+              "veg": true
+            },
+            {
+              "ft": 21214,
+              "no": "22",
+              "name": "Kebabpizza",
+              "ingredients": ["tomatsås", "ost", "kebabkött (nöt)", "feferoni", "lök"],
+              "price": 145,
+              "includes": ["sås", "dricka"]
+            },
+            {
+              "ft": 21215,
+              "no": "23",
+              "name": "Gyrospizza",
+              "ingredients": ["tomatsås", "ost", "kebabkött (fläskkarré)", "feferoni", "lök"],
+              "price": 145,
+              "includes": ["sås", "dricka"]
+            },
+            {
+              "ft": 21216,
+              "no": "24",
+              "name": "Kycklingpizza",
+              "ingredients": ["tomatsås", "ost", "kyckling", "oliver", "färska champinjoner", "lök", "paprika"],
+              "price": 145,
+              "includes": ["sås", "dricka"]
+            },
+            {
+              "ft": 193514,
+              "no": "25",
+              "name": "Holy Pepperoni",
+              "ingredients": ["tomatsås", "ost", "pepperonikorv", "paprika", "vitlöksost"],
+              "price": 145,
+              "includes": ["dricka"]
+            },
+            {
+              "ft": 21230,
+              "no": "26",
+              "name": "Flygande Jakob",
+              "ingredients": ["tomatsås", "ost", "kyckling", "jordnötter", "banan", "ananas", "curry"],
+              "price": 145,
+              "includes": ["dricka"]
+            },
+            {
+              "ft": 193347,
+              "no": "27",
+              "name": "Acapulco",
+              "ingredients": ["tomatsås", "ost", "fläskfilé", "jalapeños", "tacosås", "färska champinjoner", "lök"],
+              "price": 145,
+              "includes": ["dricka"]
+            },
+            {
+              "ft": 193332,
+              "no": "28",
+              "name": "Kebabpizza special",
+              "ingredients": ["tomatsås", "ost", "kebabkött (nöt)", "gurka", "isbergssallad", "färska tomater", "feferoni", "lök"],
+              "price": 150,
+              "includes": ["sås", "dricka"]
+            },
+            {
+              "ft": 193333,
+              "no": "29",
+              "name": "Gyrospizza special",
+              "ingredients": ["tomatsås", "ost", "kebabkött (fläskkarré)", "gurka", "isbergssallad", "färska tomater", "feferoni", "lök"],
+              "price": 150,
+              "includes": ["sås", "dricka"]
+            },
+            {
+              "ft": 193334,
+              "no": "30",
+              "name": "Kycklingpizza special",
+              "ingredients": ["tomatsås", "ost", "kyckling", "gurka", "isbergssallad", "färska tomater", "feferoni", "lök"],
+              "price": 150,
+              "includes": ["sås", "dricka"]
+            },
+            {
+              "ft": 193348,
+              "no": "31",
+              "name": "ID Special",
+              "ingredients": ["tomatsås", "ost", "oxfilé", "färska champinjoner", "lök", "paprika", "bearnaisesås"],
+              "price": 150,
+              "includes": ["dricka"]
+            },
+            {
+              "ft": 193349,
+              "no": "32",
+              "name": "Parma Parma",
+              "ingredients": ["tomatsås", "ost", "parmaskinka", "ruccolasallad", "soltorkade tomater", "parmesan"],
+              "price": 160,
+              "includes": ["dricka"]
+            },
+            {
+              "ft": 193350,
+              "no": "33",
+              "name": "Rösi",
+              "ingredients": ["tomatsås", "ost", "oxfilé", "färska champinjoner", "soltorkade tomater", "vitlöksost"],
+              "price": 150,
+              "includes": ["dricka"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sallader",
+      "title": "Sallader",
+      "groups": [
+        {
+          "ftCategory": 2718,
+          "items": [
+            {
+              "ft": 21271,
+              "name": "Räksallad",
+              "ingredients": ["ost", "räkor", "citron", "ruccolasallad", "gurka", "isbergssallad", "tomat"],
+              "price": 140,
+              "includes": ["sås", "dricka"]
+            },
+            {
+              "ft": 21272,
+              "name": "Kycklingsallad",
+              "ingredients": ["ost", "kyckling", "ruccolasallad", "gurka", "isbergssallad", "ananas", "tomat"],
+              "price": 140,
+              "includes": ["sås", "dricka"]
+            },
+            {
+              "ft": 21275,
+              "name": "Falafelsallad",
+              "ingredients": ["falafel", "salladsost", "ruccolasallad", "gurka", "isbergssallad", "feferoni", "lök", "tomat"],
+              "price": 140,
+              "includes": ["sås", "dricka"],
+              "veg": true
+            },
+            {
+              "ft": 21274,
+              "name": "Gyrossallad",
+              "ingredients": ["kebabkött (fläskkarré)", "salladsost", "ruccolasallad", "gurka", "isbergssallad", "feferoni", "lök", "tomat"],
+              "price": 140,
+              "includes": ["sås", "dricka"]
+            },
+            {
+              "ft": 21273,
+              "name": "Kebabsallad",
+              "ingredients": ["kebabkött (nöt)", "salladsost", "ruccolasallad", "gurka", "isbergssallad", "feferoni", "lök", "tomat"],
+              "price": 140,
+              "includes": ["sås", "dricka"]
+            },
+            {
+              "ft": 21276,
+              "name": "Tonfisksallad",
+              "ingredients": ["ost", "tonfisk", "citron", "ruccolasallad", "gurka", "isbergssallad", "lök", "tomat"],
+              "price": 140,
+              "includes": ["sås", "dricka"]
+            },
+            {
+              "ft": 21277,
+              "name": "Ost- och skinksallad",
+              "ingredients": ["ost", "skinka", "ruccolasallad", "gurka", "isbergssallad", "ananas", "tomat"],
+              "price": 140,
+              "includes": ["sås", "dricka"]
+            },
+            {
+              "ft": 120645,
+              "name": "Grekisk sallad",
+              "ingredients": ["salladsost", "gurka", "isbergssallad", "oliver", "tomat", "oregano"],
+              "price": 140,
+              "includes": ["sås", "dricka"],
+              "veg": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rullar",
+      "title": "Rullar & pitabröd",
+      "groups": [
+        {
+          "ftCategory": 2716,
+          "items": [
+            {
+              "ft": 21255,
+              "name": "Kebab med bröd",
+              "ingredients": ["kebabkött (nöt)", "rödlök", "gurka", "isbergssallad", "färska tomater", "feferoni"],
+              "price": 140,
+              "includes": ["sås", "dricka"]
+            },
+            {
+              "ft": 21256,
+              "name": "Kebabrulle",
+              "ingredients": ["kebabkött (nöt)", "rödlök", "gurka", "isbergssallad", "färska tomater", "feferoni"],
+              "price": 140,
+              "includes": ["sås", "dricka"]
+            },
+            {
+              "ft": 21258,
+              "name": "Gyros med bröd",
+              "ingredients": ["kebabkött (fläskkarré)", "rödlök", "gurka", "isbergssallad", "färska tomater", "feferoni"],
+              "price": 140,
+              "includes": ["sås", "dricka"]
+            },
+            {
+              "ft": 21259,
+              "name": "Gyrosrulle",
+              "ingredients": ["kebabkött (fläskkarré)", "rödlök", "gurka", "isbergssallad", "färska tomater", "feferoni"],
+              "price": 140,
+              "includes": ["sås", "dricka"]
+            },
+            {
+              "ft": 21261,
+              "name": "Kyckling med bröd",
+              "ingredients": ["kyckling", "rödlök", "gurka", "isbergssallad", "färska tomater", "feferoni"],
+              "price": 140,
+              "includes": ["sås", "dricka"]
+            },
+            {
+              "ft": 21262,
+              "name": "Kycklingrulle",
+              "ingredients": ["kyckling", "rödlök", "gurka", "isbergssallad", "färska tomater", "feferoni"],
+              "price": 140,
+              "includes": ["sås", "dricka"]
+            },
+            {
+              "ft": 21264,
+              "name": "Falafel med bröd",
+              "ingredients": ["falafel", "rödlök", "gurka", "isbergssallad", "färska tomater", "feferoni"],
+              "price": 140,
+              "includes": ["sås", "dricka"],
+              "veg": true
+            },
+            {
+              "ft": 21265,
+              "name": "Falafelrulle",
+              "ingredients": ["falafel", "rödlök", "gurka", "isbergssallad", "färska tomater", "feferoni"],
+              "price": 140,
+              "includes": ["sås", "dricka"],
+              "veg": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tallrikar",
+      "title": "Tallrikar",
+      "groups": [
+        {
+          "ftCategory": 7289,
+          "items": [
+            {
+              "ft": 21257,
+              "name": "Kebabtallrik med pommes",
+              "ingredients": ["kebabkött (nöt)", "rödlök", "gurka", "isbergssallad", "färska tomater", "feferoni"],
+              "price": 140,
+              "includes": ["sås", "dricka"]
+            },
+            {
+              "ft": 21260,
+              "name": "Gyrostallrik med pommes",
+              "ingredients": ["kebabkött (fläskkarré)", "rödlök", "gurka", "isbergssallad", "färska tomater", "feferoni"],
+              "price": 140,
+              "includes": ["sås", "dricka"]
+            },
+            {
+              "ft": 21263,
+              "name": "Kycklingtallrik med pommes",
+              "ingredients": ["kyckling", "rödlök", "gurka", "isbergssallad", "färska tomater", "feferoni"],
+              "price": 140,
+              "includes": ["sås", "dricka"]
+            },
+            {
+              "ft": 21266,
+              "name": "Falafeltallrik med pommes",
+              "ingredients": ["falafel", "rödlök", "gurka", "isbergssallad", "färska tomater", "feferoni"],
+              "price": 140,
+              "includes": ["sås", "dricka"],
+              "veg": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hamburgare",
+      "title": "Hamburgare",
+      "groups": [
+        {
+          "ftCategory": 2717,
+          "items": [
+            {
+              "ft": 21269,
+              "name": "Hamburgare 150 g",
+              "ingredients": ["ost", "isbergssallad", "färska tomater", "lök", "inlagd gurka", "hamburgerdressing"],
+              "price": 99,
+              "includes": ["dricka"]
+            },
+            {
+              "ft": 21270,
+              "name": "Hamburgertallrik 150 g",
+              "ingredients": ["ost", "isbergssallad", "färska tomater", "lök", "inlagd gurka", "hamburgerdressing", "pommes frites"],
+              "price": 120,
+              "includes": ["dricka"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "snacks",
+      "title": "Chicken & snacks",
+      "groups": [
+        {
+          "ftCategory": 14970,
+          "items": [
+            {
+              "ft": 135209,
+              "name": "Lökringar 6 st",
+              "price": 40,
+              "veg": true
+            },
+            {
+              "ft": 135210,
+              "name": "Lökringar 12 st",
+              "price": 74,
+              "veg": true
+            },
+            {
+              "ft": 135211,
+              "name": "Chili Cheese 6 st",
+              "price": 50,
+              "veg": true
+            },
+            {
+              "ft": 135212,
+              "name": "Chili Cheese 12 st",
+              "price": 89,
+              "includes": ["dricka"],
+              "veg": true
+            },
+            {
+              "ft": 134942,
+              "name": "Mixtallrik",
+              "ingredients": ["3 st falafel", "3 st lökringar", "3 st nuggets"],
+              "price": 84,
+              "includes": ["sås", "dricka"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tillbehor",
+      "title": "Tillbehör",
+      "groups": [
+        {
+          "ftCategory": 1867,
+          "items": [
+            {
+              "ft": 25438,
+              "name": "Pizzasallad 20 cl",
+              "price": 15,
+              "veg": true
+            },
+            {
+              "ft": 25382,
+              "name": "Pommes frites",
+              "price": 50,
+              "veg": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "saser",
+      "title": "Såser",
+      "layout": "compact",
+      "groups": [
+        {
+          "ftCategory": 1861,
+          "items": [
+            {
+              "ft": 25390,
+              "name": "Bearnaisesås",
+              "price": 15
+            },
+            {
+              "ft": 25428,
+              "name": "Hamburgerdressing",
+              "price": 15
+            },
+            {
+              "ft": 25402,
+              "name": "Kebabsås mild",
+              "price": 15
+            },
+            {
+              "ft": 25370,
+              "name": "Kebabsås stark",
+              "price": 15
+            },
+            {
+              "ft": 25422,
+              "name": "Salsasås",
+              "price": 15
+            },
+            {
+              "ft": 25373,
+              "name": "Vitlökssås",
+              "price": 15
+            },
+            {
+              "ft": 177330,
+              "name": "Honey Chipotle",
+              "price": 15
+            },
+            {
+              "ft": 177331,
+              "name": "Sourcream & Onion",
+              "price": 15
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "drycker",
+      "title": "Drycker",
+      "layout": "compact",
+      "groups": [
+        {
+          "ftCategory": 1862,
+          "items": [
+            {
+              "ft": 25443,
+              "name": "Powerking 25 cl",
+              "price": 25
+            },
+            {
+              "ft": 25447,
+              "name": "7up 33 cl",
+              "price": 20
+            },
+            {
+              "ft": 25452,
+              "name": "Loka Naturelle 33 cl",
+              "price": 20
+            },
+            {
+              "ft": 25448,
+              "name": "Pepsi 33 cl",
+              "price": 20
+            },
+            {
+              "ft": 25449,
+              "name": "Pepsi Max 33 cl",
+              "price": 20
+            },
+            {
+              "ft": 25451,
+              "name": "Trocadero 33 cl",
+              "price": 20
+            },
+            {
+              "ft": 167554,
+              "name": "Zingo 33 cl",
+              "price": 20
+            },
+            {
+              "ft": 167555,
+              "name": "7up Zero Pink Lemonade",
+              "price": 20
+            },
+            {
+              "ft": 178503,
+              "name": "San Pellegrino Aranciata 33 cl",
+              "price": 25
+            },
+            {
+              "ft": 178502,
+              "name": "San Pellegrino Aranciata Rosa 33 cl",
+              "price": 25
+            },
+            {
+              "ft": 177296,
+              "name": "San Pellegrino Limonata 33 cl",
+              "price": 25
+            },
+            {
+              "ft": 178504,
+              "name": "San Pellegrino Melograno & Arancia 33 cl",
+              "price": 25
+            },
+            {
+              "ft": 25460,
+              "name": "Pepsi 1,5 l",
+              "price": 40
+            },
+            {
+              "ft": 25461,
+              "name": "Pepsi Max 1,5 l",
+              "price": 40
+            },
+            {
+              "ft": 25462,
+              "name": "Coca-Cola 2 l",
+              "price": 45
+            },
+            {
+              "ft": 25463,
+              "name": "Coca-Cola Zero 2 l",
+              "price": 45
+            },
+            {
+              "ft": 25464,
+              "name": "Fanta 2 l",
+              "price": 45
+            },
+            {
+              "ft": 25465,
+              "name": "Sprite 2 l",
+              "price": 45
+            },
+            {
+              "ft": 178500,
+              "name": "Monster Original 50 cl",
+              "price": 29
+            },
+            {
+              "ft": 178501,
+              "name": "Monster Juiced Mango Loco 50 cl",
+              "price": 29
+            },
+            {
+              "ft": 177295,
+              "name": "Monster Ultra Strawberry Dreams 50 cl",
+              "price": 29
+            },
+            {
+              "ft": 178746,
+              "name": "Monster Ultra White Zero 50 cl",
+              "price": 29
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "ignoredFtCategories": {
+    "1864": "Choklad – tom i FoodToday",
+    "5010": "Snacks/Godis – tom i FoodToday",
+    "5011": "Ben & Jerry's – tom i FoodToday",
+    "22725": "Kebabrätter – samma rätter som Rullar & pitabröd och Tallrikar"
+  },
+  "ignoredFtItems": {
+    "118467": "Lökringar 6 st som tillval (finns under Chicken & snacks)",
+    "118468": "Lökringar 12 st som tillval",
+    "118469": "Chili cheese 6 st som tillval",
+    "118470": "Chili cheese 12 st som tillval",
+    "131475": "Lökringar 6 st som tillval (dubblett)",
+    "131476": "Lökringar 12 st som tillval (dubblett)",
+    "131477": "Chili cheese 6 st som tillval (dubblett)",
+    "131478": "Chili cheese 12 st som tillval (dubblett)",
+    "163724": "Pizzasallad 20 cl (dubblett)"
+  }
+}

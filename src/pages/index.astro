@@ -1,0 +1,30 @@
+---
+import Base from "../layouts/Base.astro";
+import StructuredData from "../components/StructuredData.astro";
+import Header from "../components/Header.astro";
+import Hero from "../components/Hero.astro";
+import FoodBand from "../components/FoodBand.astro";
+import Menu from "../components/Menu.astro";
+import Visit from "../components/Visit.astro";
+import Footer from "../components/Footer.astro";
+import MobileBar from "../components/MobileBar.astro";
+import OrderDialogs from "../components/OrderDialogs.astro";
+---
+
+<Base>
+  <StructuredData slot="head" />
+  <Header />
+  <main>
+    <Hero />
+    <FoodBand />
+    <Menu />
+    <Visit />
+  </main>
+  <Footer />
+  <MobileBar />
+  <OrderDialogs />
+</Base>
+
+<script>
+  import "../scripts/status";
+</script>

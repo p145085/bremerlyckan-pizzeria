@@ -1,0 +1,246 @@
+---
+import { Image } from "astro:assets";
+import logo from "../assets/brand/logo-round.png";
+import Icon from "./Icon.astro";
+import { site, ordering, activePartners, mapLinks } from "../data/site.js";
+import { groupedWeek } from "../lib/hours";
+
+const week = groupedWeek(site.hours);
+const year = new Date().getFullYear();
+const socials = Object.entries(site.social).filter(([, url]) => url) as ["facebook" | "instagram", string][];
+---
+
+<footer class="site-footer">
+  <div class="castle" aria-hidden="true"></div>
+  <div class="container footer-grid">
+    <div class="footer-brand">
+      <Image src={logo} alt={site.name} width={132} height={132} densities={[1, 2]} class="footer-logo" loading="lazy" />
+      <p>Pizza, kebab, sallader och burgare på {site.address.street} i {site.address.city}.</p>
+      {
+        socials.length > 0 && (
+          <ul class="socials" role="list">
+            {socials.map(([name, url]) => (
+              <li>
+                <a href={url} target="_blank" rel="noopener" aria-label={name === "facebook" ? "Facebook" : "Instagram"}>
+                  <Icon name={name} />
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+
+    <div class="footer-col">
+      <h2>Besök oss</h2>
+      <address>
+        {site.address.street}<br />
+        {site.address.postalCode} {site.address.city}
+      </address>
+      <a class="footer-link" href={mapLinks.directions} target="_blank" rel="noopener">
+        <Icon name="directions" /> Vägbeskrivning
+      </a>
+    </div>
+
+    <div class="footer-col">
+      <h2>Öppettider</h2>
+      <dl class="footer-hours">
+        {
+          week.map((g) => (
+            <div>
+              <dt>{g.label}</dt>
+              <dd>{g.time}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+
+    <div class="footer-col">
+      <h2>Beställ</h2>
+      <ul class="footer-links" role="list">
+        <li>
+          <a class="footer-link" href={ordering.direct.url} data-order>
+            <Icon name="bag" /> Beställ online
+          </a>
+        </li>
+        <li>
+          <a class="footer-link" href={site.phone.href}>
+            <Icon name="phone" /> {site.phone.display}
+          </a>
+        </li>
+        {
+          activePartners.map((p) => (
+            <li>
+              <a class="footer-link" href={p.url} target="_blank" rel="noopener">
+                <Icon name="external" /> {p.name}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+
+  <div class="container footer-bottom">
+    <p>
+      © {year} {site.name} · {site.company.name} · Org.nr {site.company.orgNr}
+    </p>
+    <p>
+      <a href={ordering.direct.termsUrl} target="_blank" rel="noopener">Köpvillkor</a>
+      <span aria-hidden="true"> · </span>
+      Onlinebeställning via {ordering.direct.name}
+    </p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    /* Kalmar slott (från logotypen) står på linjen ovanför sidfotens innehåll */
+    --castle-w: min(500px, 84vw);
+    --castle-h: calc(var(--castle-w) * 396 / 882);
+    --castle-top: clamp(36px, 5vw, 56px);
+    position: relative;
+    overflow: hidden;
+    padding-top: calc(var(--castle-top) + var(--castle-h) - 2px);
+    background: var(--dark);
+    color: rgb(246 238 221 / 0.82);
+    font-size: 0.9375rem;
+  }
+  .site-footer::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto;
+    height: 6px;
+    background: var(--tricolore);
+  }
+  .castle {
+    position: absolute;
+    top: var(--castle-top);
+    left: 50%;
+    width: var(--castle-w);
+    height: var(--castle-h);
+    transform: translateX(-50%);
+    background: var(--gold-light);
+    -webkit-mask: url("/images/castle.webp") center / 100% 100% no-repeat;
+    mask: url("/images/castle.webp") center / 100% 100% no-repeat;
+    opacity: 0.4;
+    pointer-events: none;
+  }
+
+  .footer-grid {
+    position: relative;
+    display: grid;
+    gap: 36px;
+    padding-block: 36px 40px;
+    border-top: 1px solid rgb(201 166 107 / 0.4);
+  }
+  @media (min-width: 700px) {
+    .footer-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1000px) {
+    .footer-grid {
+      grid-template-columns: 1.3fr repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .footer-brand {
+    display: grid;
+    align-content: start;
+    gap: 16px;
+    max-width: 22rem;
+  }
+  .footer-logo {
+    width: 104px;
+    height: 104px;
+    border-radius: 50%;
+    box-shadow: 0 0 0 4px rgb(201 166 107 / 0.35);
+  }
+  .socials {
+    display: flex;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .socials a {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1px rgb(246 238 221 / 0.3);
+    color: var(--paper);
+  }
+
+  .footer-col {
+    display: grid;
+    align-content: start;
+    gap: 12px;
+  }
+  .footer-col h2 {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+  }
+  .footer-col address {
+    font-style: normal;
+    color: var(--paper);
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  .footer-hours {
+    display: grid;
+    gap: 6px;
+  }
+  .footer-hours div {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .footer-hours dd {
+    color: var(--paper);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  .footer-links {
+    display: grid;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .footer-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--paper);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .footer-link:hover {
+    color: var(--gold-light);
+  }
+  .footer-link :global(.icon) {
+    color: var(--gold-light);
+  }
+
+  .footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px 24px;
+    padding-block: 20px 28px;
+    border-top: 1px solid rgb(246 238 221 / 0.14);
+    font-size: 0.8125rem;
+    color: rgb(246 238 221 / 0.6);
+  }
+  .footer-bottom a {
+    color: rgb(246 238 221 / 0.85);
+  }
+</style>

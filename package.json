@@ -1,0 +1,30 @@
+{
+  "name": "bremerlyckan-pizzeria",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Webbplats för Bremerlyckan Pizzeria, Kalmar",
+  "engines": {
+    "node": ">=20.3.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "sync-menu": "node scripts/sync-menu.mjs"
+  },
+  "dependencies": {
+    "astro": "^5.18.2",
+    "leaflet": "^1.9.4",
+    "sharp": "^0.35.5"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "@types/leaflet": "^1.9.22",
+    "typescript": "^5.9.3"
+  },
+  "overrides": {
+    "sharp": "^0.35.5"
+  }
+}

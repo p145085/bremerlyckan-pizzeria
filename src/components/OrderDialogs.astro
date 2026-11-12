@@ -1,0 +1,304 @@
+---
+// Beställningsflödet:
+//  • Bara egen webbshop konfigurerad  -> "Beställ online" går direkt dit
+//    (i en ruta ovanpå sidan på dator om det fungerar, annars i samma flik).
+//  • Leveranstjänster ifyllda i site.js -> en ruta där kunden väljer kanal.
+import Icon from "./Icon.astro";
+import { site, ordering, activePartners } from "../data/site.js";
+
+const hasChooser = activePartners.length > 0;
+const direct = ordering.direct.url;
+const sep = direct.includes("?") ? "&" : "?";
+const embedUrl = ordering.direct.embedParams ? `${direct}${sep}${ordering.direct.embedParams}` : direct;
+---
+
+{
+  hasChooser && (
+    <dialog class="order-dialog" id="order-dialog" aria-labelledby="order-title">
+      <div class="od">
+        <button type="button" class="od-close" data-close aria-label="Stäng">
+          <Icon name="close" />
+        </button>
+        <p class="eyebrow">Beställ</p>
+        <h2 id="order-title" class="od-title">Hur vill du beställa?</h2>
+
+        <a class="od-direct" href={direct} data-order="direct">
+          <span class="od-direct-icon">
+            <Icon name="bag" />
+          </span>
+          <span class="od-direct-text">
+            <strong>Direkt hos oss</strong>
+            <span>Avhämtning eller hemkörning via vår egen webbshop</span>
+          </span>
+          <Icon name="arrow" class="arrow" />
+        </a>
+
+        <p class="od-sub">Eller via en leveranstjänst</p>
+        <ul class="od-partners" role="list">
+          {activePartners.map((p) => (
+            <li>
+              <a href={p.url} target="_blank" rel="noopener" style={`--brand:${p.color}`}>
+                <span class="od-dot" aria-hidden="true" />
+                {p.name}
+                <Icon name="external" class="od-ext" />
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        <a class="od-phone" href={site.phone.href}>
+          <Icon name="phone" /> Ring och beställ: <strong>{site.phone.display}</strong>
+        </a>
+      </div>
+    </dialog>
+  )
+}
+
+<dialog class="frame-dialog" id="order-frame" aria-label={`Beställ online från ${site.name}`}>
+  <div class="fd">
+    <div class="fd-bar">
+      <strong class="fd-title">Beställ från {site.name}</strong>
+      <a class="fd-newtab" href={direct} target="_blank" rel="noopener">
+        Öppna i ny flik <Icon name="external" />
+      </a>
+      <button type="button" class="fd-close" data-close>
+        <Icon name="close" /> Stäng
+      </button>
+    </div>
+    <iframe title={`Beställning – ${site.name}`} data-src={embedUrl}></iframe>
+  </div>
+</dialog>
+
+<script>
+  import "../scripts/order";
+</script>
+
+<style>
+  dialog {
+    padding: 0;
+    border: 0;
+    color: var(--ink);
+    background: transparent;
+    max-width: none;
+    max-height: none;
+  }
+  dialog::backdrop {
+    background: rgb(29 25 21 / 0.55);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+  }
+  :global(html:has(dialog[open])) {
+    overflow: hidden;
+  }
+
+  /* ── Välj kanal ── */
+  .order-dialog {
+    width: min(100% - 24px, 520px);
+    margin: auto;
+  }
+  .od {
+    position: relative;
+    display: grid;
+    gap: 14px;
+    padding: 28px 24px 22px;
+    border-radius: var(--radius-lg);
+    background: var(--paper);
+    box-shadow: var(--shadow-lg);
+  }
+  .order-dialog[open] .od {
+    animation: pop 0.28s var(--ease-out);
+  }
+  .od-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--paper-2);
+    cursor: pointer;
+  }
+  .od-close:hover {
+    background: var(--paper-3);
+  }
+  .od-title {
+    font-size: 2.2rem;
+    margin-bottom: 4px;
+  }
+  .od-direct {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 18px;
+    border-radius: var(--radius);
+    background: var(--tomato);
+    color: #fff;
+    text-decoration: none;
+    box-shadow: 0 12px 26px -12px rgb(146 38 26 / 0.8);
+    transition: background-color 0.15s ease;
+  }
+  .od-direct:hover {
+    background: var(--tomato-deep);
+  }
+  .od-direct-icon {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.16);
+    flex: none;
+  }
+  .od-direct-text {
+    display: grid;
+    gap: 2px;
+    flex: 1;
+  }
+  .od-direct-text strong {
+    font-size: 1.125rem;
+  }
+  .od-direct-text span {
+    font-size: 0.875rem;
+    opacity: 0.9;
+  }
+  .od-direct :global(.arrow) {
+    transition: transform 0.2s var(--ease-out);
+  }
+  .od-direct:hover :global(.arrow) {
+    transform: translateX(3px);
+  }
+  .od-sub {
+    margin-top: 6px;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .od-partners {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .od-partners a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 52px;
+    padding: 0 14px;
+    border-radius: var(--radius-sm);
+    background: #fff;
+    box-shadow: inset 0 0 0 1px var(--line-strong);
+    font-weight: 700;
+    white-space: nowrap;
+    text-decoration: none;
+    transition: box-shadow 0.15s ease;
+  }
+  .od-partners a:hover {
+    box-shadow: inset 0 0 0 2px var(--brand);
+  }
+  .od-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--brand);
+    flex: none;
+  }
+  .od-partners :global(.od-ext) {
+    margin-left: auto;
+    width: 1em;
+    height: 1em;
+    color: var(--muted);
+  }
+  .od-phone {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 6px;
+    padding: 12px;
+    border-radius: var(--radius-sm);
+    font-size: 0.9375rem;
+    text-decoration: none;
+    color: var(--ink-2);
+  }
+  .od-phone:hover {
+    background: var(--paper-2);
+  }
+
+  /* ── Webbshoppen i en ruta ── */
+  .frame-dialog {
+    width: min(100% - 32px, 760px);
+    height: min(100% - 32px, 920px);
+    margin: auto;
+  }
+  .fd {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--paper);
+    box-shadow: var(--shadow-lg);
+  }
+  .frame-dialog[open] .fd {
+    animation: pop 0.28s var(--ease-out);
+  }
+  .fd-bar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 12px 10px 20px;
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .fd-title {
+    flex: 1;
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .fd-newtab {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.875rem;
+    color: var(--gold-light);
+    white-space: nowrap;
+  }
+  .fd-close {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 40px;
+    padding: 0 14px;
+    border: 0;
+    border-radius: var(--pill);
+    background: var(--paper);
+    color: var(--ink);
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .frame-dialog iframe {
+    flex: 1;
+    width: 100%;
+    border: 0;
+    background: #fff;
+  }
+
+  @keyframes pop {
+    from {
+      opacity: 0;
+      transform: translateY(12px) scale(0.98);
+    }
+  }
+</style>

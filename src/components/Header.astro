@@ -1,0 +1,206 @@
+---
+import { Image } from "astro:assets";
+import logo from "../assets/brand/logo-round.png";
+import Icon from "./Icon.astro";
+import { site, ordering } from "../data/site.js";
+---
+
+<header class="site-header" data-header>
+  <div class="container header-inner">
+    <a class="brand" href="/#top" aria-label={`${site.name}, till början av sidan`}>
+      <Image
+        src={logo}
+        alt=""
+        width={56}
+        height={56}
+        densities={[1, 2]}
+        class="brand-logo"
+        loading="eager"
+      />
+      <span class="brand-text" aria-hidden="true">
+        <span class="brand-name">Bremerlyckan</span>
+        <span class="brand-sub">Pizzeria · Kalmar</span>
+      </span>
+    </a>
+
+    <nav class="main-nav" aria-label="Huvudmeny">
+      <a href="/#meny">Meny</a>
+      <a href="/#oppettider">Öppettider</a>
+      <a href="/#hitta-hit">Hitta hit</a>
+    </nav>
+
+    <div class="header-actions">
+      <p class="status header-status" data-status data-status-format="short" data-state="unknown">
+        <span class="dot" aria-hidden="true"></span>
+        <span data-status-text>Öppet alla dagar</span>
+      </p>
+      <a class="header-phone" href={site.phone.href}>
+        <Icon name="phone" />
+        <span>{site.phone.display}</span>
+      </a>
+      <a class="btn btn-primary btn-sm header-order" href={ordering.direct.url} data-order>
+        <Icon name="bag" /> Beställ online
+      </a>
+    </div>
+  </div>
+</header>
+
+<script>
+  const header = document.querySelector<HTMLElement>("[data-header]");
+  const onScroll = () => header?.toggleAttribute("data-scrolled", window.scrollY > 8);
+  onScroll();
+  window.addEventListener("scroll", onScroll, { passive: true });
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    height: var(--header-h);
+    background: rgb(246 238 221 / 0.86);
+    -webkit-backdrop-filter: saturate(1.3) blur(14px);
+    backdrop-filter: saturate(1.3) blur(14px);
+    border-bottom: 1px solid transparent;
+    transition:
+      border-color 0.25s ease,
+      box-shadow 0.25s ease,
+      background-color 0.25s ease;
+  }
+  .site-header[data-scrolled] {
+    border-bottom-color: var(--line);
+    box-shadow: 0 6px 24px -18px rgb(60 35 15 / 0.5);
+    background: rgb(246 238 221 / 0.92);
+  }
+
+  .header-inner {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    min-width: 0;
+  }
+  .brand-logo {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    box-shadow:
+      0 0 0 1px rgb(29 25 21 / 0.1),
+      0 4px 12px -4px rgb(60 35 15 / 0.35);
+    transition: transform 0.4s var(--ease-out);
+  }
+  .brand:hover .brand-logo {
+    transform: rotate(-8deg) scale(1.04);
+  }
+  .brand-text {
+    display: grid;
+    line-height: 1;
+  }
+  .brand-name {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.3rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+  .brand-sub {
+    margin-top: 4px;
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .main-nav {
+    display: none;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .header-status {
+    font-size: 0.8125rem;
+    padding: 6px 12px 6px 10px;
+    border-radius: var(--pill);
+    background: rgb(255 255 255 / 0.55);
+    box-shadow: inset 0 0 0 1px var(--line);
+  }
+  .header-phone,
+  .header-order {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    .header-order {
+      display: inline-flex;
+    }
+    .header-status {
+      display: none;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .brand-logo {
+      width: 56px;
+      height: 56px;
+    }
+    .brand-name {
+      font-size: 1.55rem;
+    }
+    .brand-sub {
+      font-size: 0.7rem;
+    }
+    .main-nav {
+      display: flex;
+      gap: clamp(20px, 3vw, 40px);
+      margin-inline: auto;
+    }
+    .main-nav a {
+      position: relative;
+      padding: 6px 0;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .main-nav a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 2px;
+      border-radius: 2px;
+      background: var(--tomato);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.25s var(--ease-out);
+    }
+    .main-nav a:hover::after {
+      transform: scaleX(1);
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .header-phone {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      text-decoration: none;
+      font-variant-numeric: tabular-nums;
+    }
+    .header-phone:hover {
+      color: var(--tomato);
+    }
+  }
+</style>

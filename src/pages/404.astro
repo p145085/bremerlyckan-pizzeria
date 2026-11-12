@@ -1,0 +1,43 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import MobileBar from "../components/MobileBar.astro";
+import OrderDialogs from "../components/OrderDialogs.astro";
+import Icon from "../components/Icon.astro";
+import { ordering } from "../data/site.js";
+---
+
+<Base title="Sidan finns inte – Bremerlyckan Pizzeria" noindex>
+  <Header />
+  <main class="nf container">
+    <p class="eyebrow">404</p>
+    <h1 class="section-title">Den här sidan <em>finns inte</em></h1>
+    <p class="lead">Men pizzan gör det. Kolla menyn eller beställ direkt.</p>
+    <div class="nf-ctas">
+      <a class="btn btn-primary btn-lg" href={ordering.direct.url} data-order>Beställ online <Icon name="arrow" class="arrow" /></a>
+      <a class="btn btn-ghost btn-lg" href="/#meny">Se menyn</a>
+    </div>
+  </main>
+  <Footer />
+  <MobileBar />
+  <OrderDialogs />
+</Base>
+
+<script>
+  import "../scripts/status";
+</script>
+
+<style>
+  .nf {
+    display: grid;
+    justify-items: start;
+    gap: 20px;
+    padding-block: clamp(64px, 12vw, 160px);
+  }
+  .nf-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+</style>

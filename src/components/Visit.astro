@@ -1,0 +1,378 @@
+---
+import { getImage } from "astro:assets";
+import logo from "../assets/brand/logo-round.png";
+import Icon from "./Icon.astro";
+import { site, mapLinks } from "../data/site.js";
+import { groupedWeek } from "../lib/hours";
+
+const week = groupedWeek(site.hours);
+const special = [...site.hours.special].sort((a, b) => a.date.localeCompare(b.date));
+const pinLogo = await getImage({ src: logo, width: 96, height: 96, format: "webp" });
+const fullAddress = `${site.address.street}, ${site.address.postalCode} ${site.address.city}`;
+---
+
+<section class="visit" id="hitta-hit" aria-labelledby="visit-title">
+  <div class="container visit-grid">
+    <div class="visit-card">
+      <p class="eyebrow">Hitta hit</p>
+      <h2 id="visit-title" class="section-title">{site.address.street}</h2>
+      <address class="visit-address">
+        {site.name}<br />
+        {site.address.street}<br />
+        {site.address.postalCode} {site.address.city}
+      </address>
+
+      <div class="visit-actions">
+        <a class="btn btn-primary" href={mapLinks.directions} target="_blank" rel="noopener">
+          <Icon name="directions" /> Vägbeskrivning
+        </a>
+        <a class="btn btn-ghost" href={site.phone.href}>
+          <Icon name="phone" />
+          {site.phone.display}
+        </a>
+      </div>
+      <p class="visit-more">
+        Öppna i <a href={mapLinks.google} target="_blank" rel="noopener">Google Maps</a> eller
+        <a href={mapLinks.apple} target="_blank" rel="noopener">Apple Kartor</a>
+      </p>
+
+      <div class="hours" id="oppettider">
+        <div class="hours-head">
+          <h3>Öppettider</h3>
+          <p class="status" data-status data-state="unknown">
+            <span class="dot" aria-hidden="true"></span>
+            <span data-status-text>Öppet alla dagar</span>
+          </p>
+        </div>
+        <dl class="hours-list">
+          {
+            week.map((g) => (
+              <div class="hours-row" data-days={g.days.join(",")}>
+                <dt>{g.label}</dt>
+                <dd>{g.time}</dd>
+              </div>
+            ))
+          }
+        </dl>
+        {
+          special.length > 0 && (
+            <div class="hours-special" data-special-block>
+              <p class="hours-special-title">Avvikande öppettider</p>
+              <dl class="hours-list">
+                {special.map((s) => {
+                  const [, m, d] = s.date.split("-").map(Number);
+                  const time = s.closed || !s.open || !s.close ? "Stängt" : `${s.open}–${s.close}`;
+                  return (
+                    <div class="hours-row" data-special-date={s.date}>
+                      <dt>
+                        {s.label ? `${s.label} ` : ""}
+                        <span class="hours-date">
+                          {d}/{m}
+                        </span>
+                      </dt>
+                      <dd>{time}</dd>
+                    </div>
+                  );
+                })}
+              </dl>
+            </div>
+          )
+        }
+        <p class="hours-note"><Icon name="scooter" /> {site.hours.note}</p>
+      </div>
+    </div>
+
+    <div class="visit-map">
+      <div
+        class="map"
+        data-map
+        data-lat={site.geo.lat}
+        data-lng={site.geo.lng}
+        data-name={site.name}
+        data-address={fullAddress}
+        data-directions={mapLinks.directions}
+        data-logo={pinLogo.src}
+        role="region"
+        aria-label={`Karta: ${site.name} ligger på ${fullAddress}`}
+      >
+        <a class="map-fallback" href={mapLinks.google} target="_blank" rel="noopener">
+          <Icon name="pin" />
+          <span>Visa {site.address.street} på kartan</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import "../scripts/map";
+</script>
+
+<style>
+  .visit {
+    padding-block: clamp(56px, 8vw, 104px);
+    background: var(--paper-2);
+    border-top: 1px solid var(--line);
+  }
+  .visit-grid {
+    display: grid;
+    gap: clamp(24px, 4vw, 48px);
+  }
+  @media (min-width: 960px) {
+    .visit-grid {
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.25fr);
+      align-items: stretch;
+    }
+  }
+
+  .visit-card {
+    display: grid;
+    align-content: start;
+    gap: 18px;
+  }
+  .visit-address {
+    font-style: normal;
+    font-size: 1.125rem;
+    line-height: 1.5;
+    color: var(--ink-2);
+  }
+  .visit-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .visit-more {
+    font-size: 0.9375rem;
+    color: var(--muted);
+  }
+  .visit-more a {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .hours {
+    margin-top: 10px;
+    padding: 22px 24px 20px;
+    border-radius: var(--radius);
+    background: var(--paper);
+    box-shadow:
+      inset 0 0 0 1px var(--line),
+      var(--shadow-sm);
+    scroll-margin-top: 16px;
+  }
+  .hours-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px 16px;
+    margin-bottom: 10px;
+  }
+  .hours-head h3 {
+    font-size: 1.85rem;
+  }
+  .hours-list {
+    display: grid;
+  }
+  .hours-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 11px 12px;
+    margin-inline: -12px;
+    border-radius: var(--radius-sm);
+    border-bottom: 1px dashed var(--line-strong);
+  }
+  .hours-row:last-child {
+    border-bottom: 0;
+  }
+  .hours-row dd {
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  .hours-row.is-today {
+    background: var(--tomato-soft);
+    border-bottom-color: transparent;
+  }
+  .hours-row.is-today dt {
+    font-weight: 700;
+  }
+  .hours-row.is-today dt::after {
+    content: "Idag";
+    margin-left: 10px;
+    padding: 2px 8px;
+    border-radius: var(--pill);
+    background: var(--tomato);
+    color: #fff;
+    font-size: 0.6875rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    vertical-align: 2px;
+  }
+  .hours-special {
+    margin-top: 12px;
+  }
+  .hours-special-title {
+    font-size: 0.8125rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--tomato);
+  }
+  .hours-date {
+    color: var(--muted);
+  }
+  .hours-note {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    font-size: 0.875rem;
+    color: var(--muted);
+  }
+
+  /* ── Karta ── */
+  .visit-map {
+    min-height: 360px;
+  }
+  .map {
+    position: relative;
+    height: 100%;
+    min-height: 360px;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 50% 50%, rgb(179 48 29 / 0.12), transparent 40%),
+      repeating-linear-gradient(0deg, transparent 0 38px, rgb(29 25 21 / 0.05) 38px 40px),
+      repeating-linear-gradient(90deg, transparent 0 38px, rgb(29 25 21 / 0.05) 38px 40px),
+      #e9dfcc;
+    box-shadow:
+      inset 0 0 0 1px var(--line),
+      var(--shadow);
+    isolation: isolate;
+  }
+  @media (min-width: 960px) {
+    .map {
+      min-height: 560px;
+    }
+  }
+  .map-fallback {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 8px;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .map-fallback :global(.icon) {
+    width: 40px;
+    height: 40px;
+    color: var(--tomato);
+  }
+
+  /* Leaflet-element skapas av skriptet – därför :global */
+  .map :global(.leaflet-container) {
+    font-family: var(--font-body);
+  }
+  .map :global(.leaflet-tile-pane) {
+    filter: saturate(0.78) sepia(0.14) brightness(1.02) contrast(0.98);
+  }
+  .map :global(.map-pin) {
+    background: none;
+    border: 0;
+  }
+  .map :global(.map-pin-badge) {
+    position: relative;
+    display: block;
+    width: 64px;
+    height: 64px;
+    padding: 4px;
+    border-radius: 50%;
+    background: var(--tomato);
+    box-shadow: 0 10px 22px -6px rgb(0 0 0 / 0.5);
+    animation: pin-drop 0.7s var(--ease-out) both;
+  }
+  .map :global(.map-pin-badge::after) {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -11px;
+    width: 18px;
+    height: 18px;
+    background: var(--tomato);
+    transform: translateX(-50%) rotate(45deg);
+    border-radius: 2px;
+    z-index: -1;
+  }
+  .map :global(.map-pin-badge img) {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+  }
+  .map :global(.map-pin-pulse) {
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    width: 22px;
+    height: 10px;
+    margin: 8px 0 0 -11px;
+    border-radius: 50%;
+    background: rgb(0 0 0 / 0.25);
+    filter: blur(2px);
+  }
+  .map :global(.map-label) {
+    padding: 6px 12px;
+    border: 0;
+    border-radius: var(--pill);
+    background: var(--ink);
+    color: var(--paper);
+    font-weight: 700;
+    font-size: 0.875rem;
+    box-shadow: var(--shadow);
+  }
+  .map :global(.map-label::before) {
+    border-right-color: var(--ink);
+  }
+  .map :global(.leaflet-popup-content-wrapper) {
+    border-radius: var(--radius-sm);
+  }
+  .map :global(.leaflet-popup-content) {
+    margin: 14px 18px;
+    font-size: 0.9375rem;
+    line-height: 1.45;
+  }
+  .map :global(.leaflet-popup-content a) {
+    color: var(--tomato);
+    font-weight: 700;
+  }
+  .map :global(.leaflet-control-zoom a) {
+    width: 36px;
+    height: 36px;
+    line-height: 34px;
+    color: var(--ink);
+  }
+  .map :global(.leaflet-bar) {
+    border: 0;
+    box-shadow: var(--shadow);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .map :global(.leaflet-control-attribution) {
+    font-size: 11px;
+    background: rgb(246 238 221 / 0.85);
+  }
+
+  @keyframes pin-drop {
+    from {
+      transform: translateY(-30px);
+      opacity: 0;
+    }
+    to {
+      transform: none;
+      opacity: 1;
+    }
+  }
+</style>
